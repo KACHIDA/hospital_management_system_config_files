@@ -1,0 +1,104 @@
+server:
+   port: 8081
+
+spring:
+  application:
+    name: user-service
+  cloud:
+      consul:
+       host: http://consul
+       port: 8500
+       config:
+           enabled: false
+           import-check:
+                enabled: false
+       discovery:
+           healthCheckInterval: 15s
+           instance-id: user-service.4
+       load-balancer:
+           ribbon:
+             enabled: false
+      vault:
+        url: http://vault:8200
+        token: 00000000-0000-0000-0000-000000000000
+        scheme: http
+        host: vault
+        port: 8200
+        kv:
+         enabled: true
+         backend: secret
+         application-name: hospitalmanagementsystem
+      redis:
+          host: redis
+          port: 6379
+          jedis:
+             pool:
+               max-active: 7
+               max-idle: 7
+               min-idle: 2
+               max-wait: -1ms
+      pool:
+          max-active: 256
+          max-idle: 12
+          max-wait: 100
+          min-idle: 6
+      cache:
+          type: redis
+          redis:
+           cache-null-values: false
+           time-to-live: 6000000
+  datasource:
+      username: ${dbusername}
+      password: ${dbpassword}
+      url: ${dbjdbcurl}
+      platform: mysql
+      initialization-mode: always
+      initialize: true
+
+  jpa:
+    properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: none
+      show-sql: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  data:
+    mongo:
+      host: mongo
+      database: user
+      port: 27017
+
+  kafka:
+    bootstrap-servers: kakfa:9092
+    producer:
+       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+       group-id: group_id
+       auto-offset-reset: earliest
+       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+       properties:
+          spring:
+             json:
+                trusted:
+                  packages: '*'
+
+api:
+   username: ${api_username}
+   password: ${api_password}
+   secretKey: ${secret_key}
+
+management:
+   health:
+     redis:
+      enabled: false
+     mongo:
+      enabled: false
+   endpoints:
+       web:
+         exposure:
+             include: '*'

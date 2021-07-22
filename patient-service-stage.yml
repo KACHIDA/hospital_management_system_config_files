@@ -1,0 +1,8 @@
+## Server Properties
+server:
+   port: 8086
+
+spring:
+  config:
+     import: 
+       - vault://secret/hospitalmanagementsystem/stage
