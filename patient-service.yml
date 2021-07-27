@@ -1,7 +1,13 @@
 server:
    port: 8082
 
+elasticsearch:
+   connection.url: elasticsearch:9200
+
 spring:
+  jackson:
+     serialization:
+         write_dates_as_timestamps: false
   application:
     name: patient-service
   cloud:
@@ -33,6 +39,10 @@ spring:
       username: ${dbusername}
       password: ${dbpassword}
       url: ${dbjdbcurl}
+      hikari:
+         maximum-pool-size: 20
+         max-lifetime: 1800000
+         idle-timeout: 30000
   jpa:
     properties:
         hibernate:
@@ -43,7 +53,15 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+  data:
+    elasticsearch:
+     cluster-name: elasticsearch
+     cluster-nodes: elasticsearch:9200
+
 management:
+   health:
+      elasticsearch:
+         enabled: false
    endpoints:
        web:
          exposure:
@@ -54,3 +72,9 @@ api:
    password: ${api_password}
    secretKey: ${secret_key}
    userServiceAccessToken: ${userServiceAccessToken}
+
+logging:
+   level:
+     com:
+       zaxxer:
+         hikari: DEBUG
