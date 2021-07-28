@@ -8,19 +8,6 @@ spring:
   application:
     name: user-service
   cloud:
-      consul:
-       host: http://consul
-       port: 8500
-       config:
-           enabled: false
-           import-check:
-                enabled: false
-       discovery:
-           healthCheckInterval: 15s
-           instance-id: user-service.4
-       load-balancer:
-           ribbon:
-             enabled: false
       vault:
         url: http://vault:8200
         token: 00000000-0000-0000-0000-000000000000
